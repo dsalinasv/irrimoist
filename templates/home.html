@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<title>Prediccion de humedad</title>
+<head>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+<script type="text/javascript">
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<script type=text/javascript>
+$(function() {
+    $('a#predict').bind('click', function() {
+        $.ajax({
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            url: $SCRIPT_ROOT + 'predict',
+            data: JSON.stringify([{Sensor:'SP200',Textura:'R',Periodo:300}]),
+            success: function(data) {
+                $("#prediction").text(data.prediction);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        return false;
+    });
+});
+</script>
+</head>
+<body>
+  <a href=# id=predict>Predecir Humedad</a>
+  <p><span id=prediction>?</span>
+</body>
+</html>
